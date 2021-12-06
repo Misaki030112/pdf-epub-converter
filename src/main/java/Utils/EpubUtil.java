@@ -1,4 +1,4 @@
-package util;
+package Utils;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
@@ -6,12 +6,17 @@ import nl.siegmann.epublib.epub.EpubWriter;
 
 import java.io.*;
 
+/**
+ * Epub操作工具类
+ * @author CHJ
+ */
 public class EpubUtil {
 
     /**
      * 用于将文字转换为html文件
      * @param targetPath 存入html文件的路径
      * @param text 用于解析的文本->html文件
+     * @return 存入Html文件的路径
      */
     public static String textToHtml(String targetPath,String[] text) {
         try {
