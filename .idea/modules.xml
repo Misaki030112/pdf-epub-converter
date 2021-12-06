@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pdf-epub-conveter.iml" filepath="$PROJECT_DIR$/.idea/pdf-epub-conveter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pdf-epub-conveter.iml" filepath="$PROJECT_DIR$/pdf-epub-conveter.iml" />
     </modules>
   </component>
 </project>
