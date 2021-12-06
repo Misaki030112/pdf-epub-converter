@@ -1,10 +1,7 @@
-import nl.siegmann.epublib.domain.Book;
-import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.epub.EpubWriter;
-import org.junit.jupiter.api.Test;
-import util.EpubUtil;
 
-import java.io.*;
+import org.junit.jupiter.api.Test;
+import Utils.EpubUtil;
+
 
 public class testToCreateEpub {
 
@@ -13,11 +10,6 @@ public class testToCreateEpub {
     public static String Path = "F:\\epubtest\\Data\\11.html";
 
     public static String targetPath = "F:\\epubtest\\Data\\11.epub";
-
-
-
-
-
 
 
 
