@@ -22,9 +22,22 @@
             <artifactId>pdfbox</artifactId>
             <version>2.0.24</version>
         </dependency>
+        <!--单元测试-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+
 
 
     </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
-    
+
 </project>
