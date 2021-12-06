@@ -9,8 +9,8 @@
         <module name="pdf-epub-conveter" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="15">
-      <module name="pdf-epub-conveter" target="16" />
+    <bytecodeTargetLevel>
+      <module name="pdf-epub-conveter" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
