@@ -8,7 +8,6 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/e-iceblue/spire.pdf/4.10.2/spire.pdf-4.10.2-sources.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/e-iceblue/spire.pdf/4.10.2/spire.pdf-4.10.2.jar!/" />
     </SOURCES>
   </library>
 </component>

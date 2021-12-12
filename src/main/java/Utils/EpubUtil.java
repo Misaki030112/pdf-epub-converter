@@ -46,8 +46,8 @@ public class EpubUtil {
 
     /**
      * 用于转换分离pdf
-     * @param pdfFilePath 需要转换的pdf路径
-     * @param targetFilePath 用于保存分离出来的pdf文件
+     * @param pdfFilePath 需要转换的pdf文件的路径
+     * @param targetFilePath 用于保存分离出来的pdf文件集合的路径
      */
     public static void splitPdf(String pdfFilePath,String targetFilePath){
         PdfDocument doc = new PdfDocument();
@@ -58,8 +58,8 @@ public class EpubUtil {
 
     /**
      *
-     * @param pdfFilePath 需要转换的pdf路径
-     * @param targetFilePath 保存的html路径
+     * @param pdfFilePath 需要转换的pdf文件集合的路径
+     * @param targetFilePath 保存的html文件集合的路径
      * @throws FileNotFoundException 可能会抛出的异常（找不到文件）
      */
     public static void createHtml(String pdfFilePath,String targetFilePath) throws FileNotFoundException {
@@ -78,7 +78,7 @@ public class EpubUtil {
 
     /**
      * 根据html路径创建epub
-     * @param filePath 存放html的路径
+     * @param filePath 存放html文件集合的路径
      * @param targetFile 用于存放epub文件的路径
      */
     public static void createEpub(String filePath,String targetFile){
@@ -99,6 +99,7 @@ public class EpubUtil {
             }
 
             for (String s : fileNameArr) {
+                //去除Html文件里面的水印
                 updateHtml(s);
             }
 
