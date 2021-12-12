@@ -1,10 +1,14 @@
 package Utils;
 
+import com.spire.pdf.FileFormat;
+import com.spire.pdf.PdfDocument;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubWriter;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Epub操作工具类
@@ -13,39 +17,63 @@ import java.io.*;
 public class EpubUtil {
 
     /**
-     * 用于将文字转换为html文件
-     * @param targetPath 存入html文件的路径
-     * @param text 用于解析的文本->html文件
-     * @return 存入Html文件的路径
+     * 用于更新Html内容的函数
+     * @param htmlFilePath 需要转换Html的路径
      */
-    public static String textToHtml(String targetPath,String[] text) {
+    public static void updateHtml(String htmlFilePath) {
         try {
-            String encoding = "UTF-8";
-            FileOutputStream fos = new FileOutputStream(new File(targetPath));
-            OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
-            BufferedWriter bw = new BufferedWriter(osw);
-            bw.write("<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "    <title>Test</title>\n" +
-                    "    <link href=\"book1.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
-                    "</head>\n" +
-                    "<body>");
-            for (String s : text) {
-                bw.write("<p>" + s + "</p>");
-                bw.write("\n");
+            BufferedReader in = new BufferedReader(new FileReader(htmlFilePath));
+            StringBuilder sb = new StringBuilder();
+            String str = "";
+            while ((str = in.readLine()) != null) {
+                if(str.equals("<meta charset=\"utf-8\"><title></title>")){
+                    str = "<meta charset=\"utf-8\"/><title></title>";
+                }
+                sb.append(str);
             }
-            bw.write("</body>\n" +
-                    "</html>");
-            bw.close();
-            osw.close();
+            str = sb.toString();
+            str = str.replaceAll("Evaluation Warning : The document was created with Spire.PDF for java.","Test");
+            str = str.replaceAll("Evaluation Warning : The document was created with Spire.PDF for Java.","Test");
+            File file = new File(htmlFilePath);
+            if (!file.exists())
+                file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(str.getBytes());
             fos.close();
-            return targetPath;
-        } catch (Exception e) {
-            System.out.println("读取文件内容出错");
-            e.printStackTrace();
+        } catch (IOException e) {
         }
-        return null;
+    }
+
+    /**
+     * 用于转换分离pdf
+     * @param pdfFilePath 需要转换的pdf路径
+     * @param targetFilePath 用于保存分离出来的pdf文件
+     */
+    public static void splitPdf(String pdfFilePath,String targetFilePath){
+        PdfDocument doc = new PdfDocument();
+        doc.loadFromFile(pdfFilePath);
+        //拆分为多个PDF文档
+        doc.split(targetFilePath + "/{0}.pdf", 0);
+    }
+
+    /**
+     *
+     * @param pdfFilePath 需要转换的pdf路径
+     * @param targetFilePath 保存的html路径
+     * @throws FileNotFoundException 可能会抛出的异常（找不到文件）
+     */
+    public static void createHtml(String pdfFilePath,String targetFilePath) throws FileNotFoundException {
+        File file = new File(pdfFilePath);
+        File[] files = file.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            PdfDocument pdf = new PdfDocument();
+            pdf .loadFromFile(files[i].getAbsolutePath());
+            pdf .getConvertOptions().setPdfToHtmlOptions(true,true);
+            File outFile = new File(targetFilePath +"\\"+ i + ".html");
+            OutputStream outputStream = new FileOutputStream(outFile);
+            pdf.saveToStream(outputStream, FileFormat.HTML);
+            pdf.close();
+        }
     }
 
     /**
@@ -55,15 +83,34 @@ public class EpubUtil {
      */
     public static void createEpub(String filePath,String targetFile){
         try {
-            //获取文件名
-            String fileName = filePath.substring(filePath.lastIndexOf('\\'));
-            // Create new Book
+            File file = new File(filePath);
+            File[] files = file.listFiles();
             Book book = new Book();
-            book.addSection("introduce", new Resource(new FileInputStream(
-                    new File(filePath)), fileName));
+            ArrayList<String> fileNameArr = new ArrayList<String>();
+            ArrayList<Integer> middle = new ArrayList<Integer>();
+            for (int i = 0; i < files.length; i++) {
+                if(files[i].getName().endsWith(".html")){
+                    middle.add(Integer.parseInt(files[i].getName().substring(0,files[i].getName().lastIndexOf("."))));
+                }
+            }
+            Collections.sort(middle);
+            for (Integer integer : middle) {
+                fileNameArr.add(filePath + "\\" + integer.toString() + ".html");
+            }
+
+            for (String s : fileNameArr) {
+                updateHtml(s);
+            }
 
             // Create EpubWriter
             EpubWriter epubWriter = new EpubWriter();
+            for (int i = 0; i < fileNameArr.size(); i++) {
+                String fileName = fileNameArr.get(i);
+                String pageNum = "Page:" + i;
+                String pageName = fileName.substring(fileName.lastIndexOf("\\"));
+                book.addSection(pageNum, new Resource(new FileInputStream(
+                        new File(fileNameArr.get(i))), pageName));
+            }
 
             // Write the Book as Epub
             epubWriter.write(book, new FileOutputStream(targetFile));
