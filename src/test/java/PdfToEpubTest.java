@@ -1,4 +1,5 @@
-import Utils.EpubUtil;
+import center.misaki.Utils.EpubUtil;
+import center.misaki.Utils.PdfUtil;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 
@@ -16,20 +17,19 @@ public class PdfToEpubTest {
 
 
     /**
+     * 测试将pdf按页分割成为一页页的pdf片段
+     */
+    @Test
+    public void PdfSplit(){
+        PdfUtil.splitPdfs(pdfPath,savePdfPath);
+    }
+    /**
      * 测试将分割后的pdf文件集合转为Html文件集合
      * @throws FileNotFoundException 异常未找到文件
      */
     @Test
     public void pdfToHtml() throws FileNotFoundException {
-        EpubUtil.createHtml(savePdfPath,saveHtmlPath);
-    }
-
-    /**
-     * 测试将pdf按页分割成为一页页的pdf片段
-     */
-    @Test
-    public void PdfSplit(){
-        EpubUtil.splitPdf(pdfPath,savePdfPath);
+        PdfUtil.toHtmls(savePdfPath,saveHtmlPath);
     }
 
     /**
@@ -37,7 +37,7 @@ public class PdfToEpubTest {
      */
     @Test
     public void htmlToEpub(){
-        EpubUtil.createEpub(saveHtmlPath,EpubPath);
+        EpubUtil.toEpub(saveHtmlPath,EpubPath);
     }
 
 }

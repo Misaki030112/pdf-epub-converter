@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://misaki.center:3306/conveter?useUnicode=true&characterSet=utf-8
+      username: root
+      password: WSY20030112
+
+
+
+
+
