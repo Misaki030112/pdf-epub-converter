@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Data
 @Accessors(chain = true)
-@Table(name = "pdf")
 @Entity
+@Table(name = "pdf")
 public class PdfInfo {
     //主键ID
     @Id
@@ -17,13 +17,13 @@ public class PdfInfo {
     //保存的pdf地址
     private String savePath;
     //文件大小
-    private Integer size;
+    private Long size;
     //保存时间
     private String saveTime;
     //页数
     private Integer pageNum;
     //文件名称
-    private Integer pdfName;
+    private String pdfName;
     //是否是用户上传的
     private boolean isUpload;
     //用户Id

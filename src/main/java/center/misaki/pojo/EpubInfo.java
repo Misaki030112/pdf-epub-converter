@@ -17,7 +17,7 @@ public class EpubInfo {
     //epub文件名
     private String epubName;
     //epub文件大小
-    private Integer size;
+    private Long size;
     //epub文件保存时间
     private String saveTime;
     //epub文件保存路径
