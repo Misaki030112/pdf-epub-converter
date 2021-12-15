@@ -1,0 +1,23 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://misaki.center:3306/conveter?useUnicode=true&characterSet=utf-8
+      username: root
+      password: WSY20030112
+  jpa:
+    database: mysql
+    show-sql: true  #展示SQL语句
+    generate-ddl: true  #是否自动建表
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+
+
