@@ -5,78 +5,49 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>center.misaki</groupId>
-    <artifactId>pdf-epub-conveter</artifactId>
+    <artifactId>converter_system</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>converter_api</module>
+        <module>system_consumer_80</module>
+        <module>system_eurekaServer_7081</module>
+        <module>system_zuul_9527</module>
+        <module>pdf_epub_Provider_8081</module>
+    </modules>
 
-    </parent>
-
-
+<dependencyManagement>
     <dependencies>
-        <!-- epub操作库 -->
-        <dependency>
-            <groupId>com.positiondev.epublib</groupId>
-            <artifactId>epublib-core</artifactId>
-            <version>3.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>e-iceblue</groupId>
-            <artifactId>spire.pdf</artifactId>
-            <version>4.10.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
-            <scope>provided</scope>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>2.6.1</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
 
-        <!--Mvc场景启动器-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>2021.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
-        <!--数据库依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.8</version>
-
         </dependency>
+
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>2.2.10.RELEASE</version>
         </dependency>
-
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>com.e-iceblue</id>
-            <name>e-iceblue</name>
-            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
-
+</dependencyManagement>
 
 </project>

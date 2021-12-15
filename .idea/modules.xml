@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/pdf-epub-conveter.iml" filepath="$PROJECT_DIR$/pdf-epub-conveter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/converter_api/converter_api.iml" filepath="$PROJECT_DIR$/converter_api/converter_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/converter_system.iml" filepath="$PROJECT_DIR$/converter_system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pdf_epub_Provider_8081/pdf_epub_Provider_8081.iml" filepath="$PROJECT_DIR$/pdf_epub_Provider_8081/pdf_epub_Provider_8081.iml" />
+      <module fileurl="file://$PROJECT_DIR$/system_Consumer_80/system_consumer_80.iml" filepath="$PROJECT_DIR$/system_Consumer_80/system_consumer_80.iml" />
+      <module fileurl="file://$PROJECT_DIR$/system_EurekaServer_7081/system_eurekaServer_7081.iml" filepath="$PROJECT_DIR$/system_EurekaServer_7081/system_eurekaServer_7081.iml" />
+      <module fileurl="file://$PROJECT_DIR$/system_Zuul_9527/system_zuul_9527.iml" filepath="$PROJECT_DIR$/system_Zuul_9527/system_zuul_9527.iml" />
     </modules>
   </component>
 </project>
