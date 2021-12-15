@@ -7,6 +7,7 @@ import center.misaki.dao.EpubDao;
 import center.misaki.dao.HtmlInfoDao;
 import center.misaki.dao.PdfInfoDao;
 import center.misaki.dao.UserDao;
+import center.misaki.domain.PathTotal;
 import center.misaki.pojo.*;
 import center.misaki.service.SingleEpubService;
 import com.spire.pdf.PdfDocument;
