@@ -27,6 +27,7 @@ public class HtmlUtil {
             }
             str = sb.toString();
             str = str.replaceAll("Evaluation Warning : The document was created with Spire.PDF for java.","");
+            str = str.replaceAll("Evaluation Warning : The document was created with Spire.PDF for Java.","");
             File file = new File(htmlFilePath);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(str.getBytes());

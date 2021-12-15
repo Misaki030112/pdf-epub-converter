@@ -22,5 +22,7 @@ public class User implements Serializable {
     private String password;
     //上一次操作时间
     private String lastTime;
+    //用户转换次数
+    private Integer useTimes;
 
 }

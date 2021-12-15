@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 public class PdfToEpubApplication_8081 {
     public static void main(String[] args) {
-        log.info(CommonUtils.dateFormatRightNow()+"服务启动！\n\n\n\n");
+        log.info("服务启动！\n\n\n\n");
         SpringApplication.run(PdfToEpubApplication_8081.class,args);
     }
 }

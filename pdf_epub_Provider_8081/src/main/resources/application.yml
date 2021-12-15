@@ -20,4 +20,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
 
+com:
+  path:
+    EpubPath: C:\Users\18108\Desktop\Data\EpubTotal
+    PdfPath: C:\Users\18108\Desktop\Data\PdfTotal
+    HtmlPath: C:\Users\18108\Desktop\Data\HtmlTotal
 
