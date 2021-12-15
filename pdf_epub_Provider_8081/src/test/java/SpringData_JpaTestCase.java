@@ -1,13 +1,11 @@
 import center.misaki.PdfToEpubApplication_8081;
-import center.misaki.dao.PdfInfoDao;
 import center.misaki.dao.UserDao;
+import center.misaki.domain.PathTotal;
 import center.misaki.pojo.HtmlInfo;
-import center.misaki.pojo.PathTotal;
 import center.misaki.pojo.PdfInfo;
 import center.misaki.pojo.User;
-import center.misaki.service.Impl.SingleEpubServiceImpl;
+
 import center.misaki.service.SingleEpubService;
-import com.spire.pdf.PdfDocument;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +50,7 @@ public class SpringData_JpaTestCase {
 //        userDao.save(new User().setUsername("123").setPassword("123").setLastTime("2021"));
     }
 
-    public static String uploadPdf = "C:\\Users\\18108\\Desktop\\test.pdf";
+    public static String uploadPdf = "D:\\data\\pdf\\test01\\abc.pdf";
 
 
     /**
