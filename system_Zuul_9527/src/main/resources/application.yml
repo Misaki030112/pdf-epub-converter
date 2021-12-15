@@ -1,0 +1,20 @@
+server:
+  port: 9527
+spring:
+  application:
+    name: conveter_system-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7081/eureka/
+  instance:
+    instance-id: zuul-9527
+    prefer-ip-address: true
+
+
+
+#info配置
+info:
+  app.name: ConveterSystem
+  company.name: misaki.center

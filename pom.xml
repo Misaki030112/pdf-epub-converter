@@ -4,44 +4,50 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
-    <artifactId>pdf-epub-conveter</artifactId>
+    <groupId>center.misaki</groupId>
+    <artifactId>converter_system</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>converter_api</module>
+        <module>system_consumer_80</module>
+        <module>system_eurekaServer_7081</module>
+        <module>system_zuul_9527</module>
+        <module>pdf_epub_Provider_8081</module>
+    </modules>
 
-
+<dependencyManagement>
     <dependencies>
-        <!-- epub操作库 -->
+
         <dependency>
-            <groupId>com.positiondev.epublib</groupId>
-            <artifactId>epublib-core</artifactId>
-            <version>3.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>2.6.1</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
 
-        <!--单元测试-->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>e-iceblue</groupId>
-            <artifactId>spire.pdf</artifactId>
-            <version>4.10.2</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>2021.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.8</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>2.2.10.RELEASE</version>
+        </dependency>
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>com.e-iceblue</id>
-            <name>e-iceblue</name>
-            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
-
+</dependencyManagement>
 
 </project>
