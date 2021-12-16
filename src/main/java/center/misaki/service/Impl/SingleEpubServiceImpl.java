@@ -177,5 +177,15 @@ public class SingleEpubServiceImpl implements SingleEpubService {
                 .setSize(length));
     }
 
+    @Override
+    public boolean pdfToEpub_Single(File uploadFile, String username) {
+        User user = userDao.findByUsername(username);
+        PdfInfo info = this.savePdf(uploadFile, user);
+        this.splitPdf(info);
+        HtmlInfo htmlInfo = this.saveHtml(info, user);
+        this.createEpub(info,htmlInfo, user);
+        return true;
+    }
+
 
 }

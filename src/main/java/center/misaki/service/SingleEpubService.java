@@ -15,4 +15,6 @@ public interface SingleEpubService {
     public HtmlInfo saveHtml(PdfInfo pdfInfo,User user);
 
     public void createEpub(PdfInfo pdfInfo,HtmlInfo htmlInfo,User user);
+
+    public boolean pdfToEpub_Single(File uploadFile,String username);
 }
