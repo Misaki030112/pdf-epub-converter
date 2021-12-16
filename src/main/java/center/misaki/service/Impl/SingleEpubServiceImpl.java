@@ -177,15 +177,75 @@ public class SingleEpubServiceImpl implements SingleEpubService {
                 .setSize(length));
     }
 
+    /**
+     *
+     * @param uploadFile 用户所上传的文件夹
+     * @param username 用户的名字
+     * @return 返回值为是否转换成功
+     * @throws IOException
+     */
     @Override
-    public boolean pdfToEpub_Single(File uploadFile, String username) {
+    public boolean pdfToEpub_Single(File uploadFile, String username) throws IOException {
         User user = userDao.findByUsername(username);
         PdfInfo info = this.savePdf(uploadFile, user);
         this.splitPdf(info);
         HtmlInfo htmlInfo = this.saveHtml(info, user);
         this.createEpub(info,htmlInfo, user);
+        try {
+            this.delAndMoveFile(htmlInfo,info);
+        } catch (IOException e) {
+            throw e;
+        }
         return true;
     }
 
+    /**
+     * 用于删除分离出来的pdf、保存用户上传的pdf和删除转换过程中的html文件
+     * @param htmlInfo html信息
+     * @param pdfInfo pdf信息
+     * @throws IOException
+     */
+    @Override
+    public void delAndMoveFile(HtmlInfo htmlInfo, PdfInfo pdfInfo) throws IOException {
+        //首先获取pdf的分隔文件夹，删除下面的所有文件夹
+        String splitPath = pdfInfo.getSplitPath();
+        File oldFile = new File(splitPath);
+        File[] files = oldFile.listFiles();
+        for (File file : files) {
+            while (file.exists()){
+                //如果未删除则继续删除
+                System.gc();
+                file.delete();
+            }
+        }
+        //获取保存html的文件夹，删除下面的所有文件夹,与上面同理
+        String savePath = htmlInfo.getSavePath();
+        File file = new File(savePath);
+        File[] files1 = file.listFiles();
+        for (File file1 : files1) {
+            File file2 = new File(file1.getAbsolutePath());
+            while (file2.exists()){
+                //如果未删除则继续删除
+                System.gc();
+                file2.delete();
+            }
+        }
+        //得到用户上传的pdf，并且保存将分隔pdf的文件夹作为目标文件夹
+        File pdfFile = new File(pdfInfo.getSavePath() + "\\" + pdfInfo.getPdfName());
+        try {
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            OutputStream outputStream = null;
+            InputStream inputStream = new FileInputStream(pdfFile);
+            outputStream = new FileOutputStream(splitPath + "\\" + pdfInfo.getPdfName());
+            while ((bytesRead = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            throw e;
+        }
 
+    }
 }
+
+

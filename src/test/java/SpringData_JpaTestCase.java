@@ -1,14 +1,10 @@
 import center.misaki.PdfToEpubApplication_8081;
-import center.misaki.dao.PdfInfoDao;
 import center.misaki.dao.UserDao;
-import center.misaki.pojo.HtmlInfo;
 import center.misaki.pojo.PathTotal;
-import center.misaki.pojo.PdfInfo;
 import center.misaki.pojo.User;
-import center.misaki.service.Impl.SingleEpubServiceImpl;
+import center.misaki.service.MergePdfService;
 import center.misaki.service.MulEpubService;
 import center.misaki.service.SingleEpubService;
-import com.spire.pdf.PdfDocument;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +29,9 @@ public class SpringData_JpaTestCase {
 
     @Autowired
     MulEpubService mulEpubService;
+
+    @Autowired
+    MergePdfService mergePdfService;
 
     @Autowired
     PathTotal pathTotal;
@@ -68,7 +67,7 @@ public class SpringData_JpaTestCase {
     @Test
     @Transactional
     @Rollback(false)
-    public void testSaveAndSplitPdf(){
+    public void testSaveAndSplitPdf() throws IOException {
         singleEpubService.pdfToEpub_Single(new File(uploadPdf00),"admin");
     }
 
@@ -80,8 +79,7 @@ public class SpringData_JpaTestCase {
     @Rollback(false)
     public void testMulSave() throws IOException {
         File files[] = {new File(uploadPdf00),new File(uploadPdf01)};
-        System.out.println(files);
-        mulEpubService.MergePdfToEpub(files,"admin");
+        mergePdfService.MergePdf(files,"admin");
     }
 
 }

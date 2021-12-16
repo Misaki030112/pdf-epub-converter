@@ -5,6 +5,7 @@ import center.misaki.pojo.PdfInfo;
 import center.misaki.pojo.User;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface SingleEpubService {
 
@@ -16,5 +17,7 @@ public interface SingleEpubService {
 
     public void createEpub(PdfInfo pdfInfo,HtmlInfo htmlInfo,User user);
 
-    public boolean pdfToEpub_Single(File uploadFile,String username);
+    public boolean pdfToEpub_Single(File uploadFile,String username) throws IOException;
+
+    public void delAndMoveFile(HtmlInfo htmlInfo,PdfInfo pdfInfo) throws IOException;
 }
