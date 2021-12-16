@@ -57,22 +57,22 @@ public class SpringData_JpaTestCase {
     /**
      * 测试将用户上传的pdf转为Epub
      */
-    @Test
-    @Transactional
-    @Rollback(false)
-    public void testSaveAndSplitPdf(){
-        User user = userDao.getById(1);
-        PdfInfo info = singleEpubService.savePdf(new File(uploadPdf), user);
-        singleEpubService.splitPdf(info);
-        HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);
-        singleEpubService.createEpub(info,htmlInfo, user);
-    }
-
-    @Test
-    @Transactional
-    @Rollback(false)
-    public void Mytest() throws IOException {
-        singleEpubService.pdfToEpub_Single(new File(uploadPdf),"admin");
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(false)
+//    public void testSaveAndSplitPdf(){
+//        User user = userDao.getById(1);
+//        PdfInfo info = singleEpubService.savePdf(new File(uploadPdf), user);
+//        singleEpubService.splitPdf(info);
+//        HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);
+//        singleEpubService.createEpub(info,htmlInfo, user);
+//    }
+//
+//    @Test
+//    @Transactional
+//    @Rollback(false)
+//    public void Mytest() throws IOException {
+//        singleEpubService.pdfToEpub_Single(new File(uploadPdf),"admin");
+//    }
 
 }

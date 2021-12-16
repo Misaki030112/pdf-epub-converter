@@ -1,23 +1,13 @@
 package center.misaki.service;
 
-import center.misaki.pojo.HtmlInfo;
-import center.misaki.pojo.PdfInfo;
-import center.misaki.pojo.User;
 
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface SingleEpubService {
 
-    public PdfInfo savePdf(File uploadFile, User user);
 
-    public void splitPdf(PdfInfo pdfInfo);
+    public String pdfToEpub_Single(MultipartFile uploadFile, String username) throws IOException;
 
-    public HtmlInfo saveHtml(PdfInfo pdfInfo,User user);
 
-    public void createEpub(PdfInfo pdfInfo,HtmlInfo htmlInfo,User user);
-
-    public boolean pdfToEpub_Single(File uploadFile,String username) throws IOException;
-
-    public void delAndMoveFile(HtmlInfo htmlInfo,PdfInfo pdfInfo) throws IOException;
 }

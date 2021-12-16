@@ -8,7 +8,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="system_consumer_80" />
         <module name="system_eurekaServer_7081" />
         <module name="system_zuul_9527" />
         <module name="converter_api" />
