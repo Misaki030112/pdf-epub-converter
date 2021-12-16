@@ -22,7 +22,7 @@ spring:
 
 com:
   path:
-    EpubPath: D:\data\pdf\Test\EpubTotal
-    PdfPath: D:\data\pdf\Test\PdfTotal
-    HtmlPath: D:\data\pdf\Test\HtmlTotal
+    EpubPath: F:\documents\Data\EpubTotal
+    PdfPath: F:\documents\Data\PdfTotal
+    HtmlPath: F:\documents\Data\HtmlTotal
 

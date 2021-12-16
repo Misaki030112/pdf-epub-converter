@@ -16,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.IOException;
 
 
 @SpringBootTest(classes = PdfToEpubApplication_8081.class)
@@ -50,7 +51,7 @@ public class SpringData_JpaTestCase {
 //        userDao.save(new User().setUsername("123").setPassword("123").setLastTime("2021"));
     }
 
-    public static String uploadPdf = "D:\\data\\pdf\\test01\\abc.pdf";
+    public static String uploadPdf = "F:\\documents\\Data\\test00.pdf";
 
 
     /**
@@ -65,6 +66,13 @@ public class SpringData_JpaTestCase {
         singleEpubService.splitPdf(info);
         HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);
         singleEpubService.createEpub(info,htmlInfo, user);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void Mytest() throws IOException {
+        singleEpubService.pdfToEpub_Single(new File(uploadPdf),"admin");
     }
 
 }
