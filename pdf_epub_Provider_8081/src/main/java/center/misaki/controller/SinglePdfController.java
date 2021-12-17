@@ -27,7 +27,7 @@ public class SinglePdfController {
     UserInfoService userInfoService;
 
     /**
-     * 上传接受单pdf文件进行处理
+     * 上传接受单pdf文件进行转换处理
      * @param pdfFile pdf文件
      * @param username 用户名
      * @return 返回文件名

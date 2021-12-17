@@ -6,8 +6,9 @@ import center.misaki.pojo.PdfInfo;
 import center.misaki.pojo.User;
 
 import center.misaki.service.SingleEpubService;
-import org.junit.jupiter.api.Test;
 
+
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -61,7 +62,7 @@ public class SpringData_JpaTestCase {
 //    @Transactional
 //    @Rollback(false)
 //    public void testSaveAndSplitPdf(){
-//        User user = userDao.getById(1);
+//        User user = userDao.findById(1).get();
 //        PdfInfo info = singleEpubService.savePdf(new File(uploadPdf), user);
 //        singleEpubService.splitPdf(info);
 //        HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);

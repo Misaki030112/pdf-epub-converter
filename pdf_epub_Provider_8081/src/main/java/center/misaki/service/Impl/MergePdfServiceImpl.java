@@ -8,10 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 
 @Slf4j
@@ -31,34 +33,26 @@ public class MergePdfServiceImpl implements MergePdfService {
      * @throws IOException
      */
     @Override
-    public String MergePdf(File[] files, String username) throws IOException {
+    public String MergePdf(MultipartFile[] files, String username) throws IOException {
         //获取用户信息
         User user = userDao.findByUsername(username);
         // pdf合并工具类
         PDFMergerUtility mergePdf = new PDFMergerUtility();
         // 合成文件
-        for (File file : files) {
-            try {
-                mergePdf.addSource(file);
-            } catch (FileNotFoundException e) {
-                throw e;
-            }
+        for (MultipartFile file : files) {
+            mergePdf.addSource(file.getInputStream());
         }
         // 设置合并生成pdf文件
         File savePath = new File(total.getEpubPath() + "\\" + user.getUsername() + "\\" + (user.getUseTimes() + 1));
         if(!savePath.exists()){
             savePath.mkdir();
         }
-        String path = savePath.getAbsolutePath() + "\\" + files[0].getName();
+        String path = savePath.getAbsolutePath() + "\\" + files[0].getOriginalFilename();
         mergePdf.setDestinationFileName(path);
         // 合并pdf
-        try {
             mergePdf.mergeDocuments();
             user.setUseTimes(user.getUseTimes() + 1);
             userDao.save(user);
-        } catch (Exception e) {
-            throw e;
-        }
         return path;
     }
 }

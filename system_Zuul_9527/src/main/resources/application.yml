@@ -17,3 +17,9 @@ zuul:
     first.serviceId: pdf-epub-service
     first.path: /first/**
   ignored-services: pdf-epub-service
+  host:
+    max-total-connections: 100
+pdf-epub-service:
+  ribbon:
+    ReadTimeout: 1000000
+    SocketTimeout: 6000000

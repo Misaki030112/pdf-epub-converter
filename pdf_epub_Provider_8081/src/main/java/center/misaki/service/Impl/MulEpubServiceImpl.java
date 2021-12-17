@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,32 +25,37 @@ public class MulEpubServiceImpl implements MulEpubService {
     UserDao userDao;
 
     @Autowired
-    PathTotal total;
+    PathTotal pdfTotal;
+
 
     @Override
-    public void MergePdfToEpub(File[] files, String name) throws IOException {
+    public String MergePdfToEpub(MultipartFile[] files, String username) throws IOException {
         //获取用户信息
-        User user = userDao.findByUsername(name);
+        User user = userDao.findByUsername(username);
         // pdf合并工具类
         PDFMergerUtility mergePdf = new PDFMergerUtility();
         // 合成文件
-        for (File file : files) {
-            try {
-                mergePdf.addSource(file);
-            } catch (FileNotFoundException e) {
-                throw e;
-            }
+        for (MultipartFile file : files) {
+                mergePdf.addSource(file.getInputStream());
+        }
+        //获取用户专属的pdf文件夹，若为新用户则创建文件夹
+        File userFile = new File(pdfTotal.getPdfPath() + "\\" + user.getUsername());
+        if(!userFile.exists()){
+            userFile.mkdir();
         }
         // 设置合并生成pdf文件
-        String path = total.getEpubPath() + "\\" + user.getUsername() + "\\" + files[0].getName();
+        String path = pdfTotal.getPdfPath() + "\\" + user.getUsername() + "\\" + files[0].getOriginalFilename();
+        File file = new File(path);
+        if(!file.exists()){
+            file.createNewFile();
+        }
         mergePdf.setDestinationFileName(path);
         // 合并pdf
-        try {
-            mergePdf.mergeDocuments();
-            singleEpubService.pdfToEpub_Single(new File(path),name);
-        } catch (Exception e) {
-            throw e;
-        }
+        mergePdf.mergeDocuments();
+        String epub_single = singleEpubService.pdfToEpub_Single(file, username);
+        return epub_single;
 
     }
+
+
 }
