@@ -32,6 +32,7 @@ public class HtmlUtil {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(str.getBytes());
             fos.close();
+            in.close();
         } catch (FileNotFoundException e) {
             log.error("文件不存在，或者该文件无法被读取！");
             e.printStackTrace();

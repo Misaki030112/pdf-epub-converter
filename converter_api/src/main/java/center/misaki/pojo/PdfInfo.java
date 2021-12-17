@@ -11,10 +11,7 @@ import java.io.Serializable;
 @Table(name = "pdf")
 @Entity
 public class PdfInfo implements Serializable {
-    //主键ID
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pdfId;
+
     //保存的pdf地址
     private String savePath;
     //文件大小
@@ -30,6 +27,7 @@ public class PdfInfo implements Serializable {
     //用户Id
     private Integer userId;
     //分割后的pdf集合地址
+    @Id
     private String splitPath;
 
 }

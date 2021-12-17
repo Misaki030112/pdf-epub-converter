@@ -4,10 +4,7 @@ import com.spire.pdf.FileFormat;
 import com.spire.pdf.PdfDocument;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Pdf操作工具类
@@ -34,21 +31,15 @@ public class PdfUtil {
      * @param targetFilePath 保存的html文件集合的路径
      * @throws FileNotFoundException 可能会抛出的异常（找不到文件）
      */
-    public static void toHtmls(String pdfFilePath,String targetFilePath) {
+    public static void toHtmls(String pdfFilePath,String targetFilePath) throws IOException {
         File file = new File(pdfFilePath);
         File[] files = file.listFiles();
         for (int i = 0; i < files.length; i++) {
             PdfDocument pdf = new PdfDocument();
             pdf .loadFromFile(files[i].getAbsolutePath());
             pdf .getConvertOptions().setPdfToHtmlOptions(true,true);
-            File outFile = new File(targetFilePath +"\\"+ i + ".html");
-            OutputStream outputStream = null;
-            try {
-                outputStream = new FileOutputStream(outFile);
-            } catch (FileNotFoundException e) {
-                log.error("文件不存在，或者该文件无法被读取！");
-                e.printStackTrace();
-            }
+            File outFile = new File(targetFilePath +"\\"+ files[i].getName().substring(0,files[i].getName().indexOf(".")) + ".html");
+            OutputStream  outputStream = new FileOutputStream(outFile);
             pdf.saveToStream(outputStream, FileFormat.HTML);
             pdf.close();
         }

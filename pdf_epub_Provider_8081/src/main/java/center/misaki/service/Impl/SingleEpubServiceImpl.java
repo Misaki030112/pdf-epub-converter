@@ -108,7 +108,7 @@ public class SingleEpubServiceImpl implements SingleEpubService {
      * @param user 用户的信息
      * @return 用于下面连贯操作转换为pdf的HtmlInfo对象
      */
-    public HtmlInfo saveHtml(PdfInfo pdfInfo,User user) {
+    public HtmlInfo saveHtml(PdfInfo pdfInfo,User user) throws IOException {
         //获取用户使用次数
         Integer times = user.getUseTimes();
         //获取pdf分离之后的路径(需要转换的pdf文件集合的路径)
@@ -186,6 +186,7 @@ public class SingleEpubServiceImpl implements SingleEpubService {
         User user = userDao.findByUsername(username);
         Integer times = user.getUseTimes();
         times++;
+        user.setLastTime(CommonUtils.dateFormatRightNow()).setUseTimes(times);
         String savaSplitPath = uploadFile.getParent() + "\\" + times;
         File savaSplitPathFile = new File(savaSplitPath);
         if(!savaSplitPathFile.exists()){
@@ -201,6 +202,8 @@ public class SingleEpubServiceImpl implements SingleEpubService {
                 .setSaveTime(CommonUtils.dateFormatRightNow())
                 .setUpload(true)
                 .setSplitPath(savaSplitPath);
+        pdfInfoDao.save(info);
+        userDao.save(user);
         splitPdf(info);
         HtmlInfo htmlInfo = saveHtml(info, user);
         String epub = createEpub(info, htmlInfo, user);
@@ -221,22 +224,16 @@ public class SingleEpubServiceImpl implements SingleEpubService {
         File oldFile = new File(splitPath);
         File[] files = oldFile.listFiles();
         for (File file : files) {
-            while (file.exists()){
-                //如果未删除则继续删除
-                System.gc();
-                file.delete();
-            }
+            file.delete();
         }
         //获取保存html的文件夹，删除下面的所有文件夹,与上面同理
         String savePath = htmlInfo.getSavePath();
         File file = new File(savePath);
         File[] files1 = file.listFiles();
         for (File file1 : files1) {
-            File file2 = new File(file1.getAbsolutePath());
-            while (file2.exists()){
-                //如果未删除则继续删除
+            while(file1.exists()){
                 System.gc();
-                file2.delete();
+                file1.delete();
             }
         }
         //得到用户上传的pdf，并且保存将分隔pdf的文件夹作为目标文件夹
@@ -250,6 +247,11 @@ public class SingleEpubServiceImpl implements SingleEpubService {
             while ((bytesRead = inputStream.read(buf)) > 0) {
                 outputStream.write(buf, 0, bytesRead);
             }
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+
+            pdfFile.delete();
 
     }
 }
