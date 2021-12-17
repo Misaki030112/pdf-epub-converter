@@ -14,6 +14,7 @@ import com.spire.pdf.PdfDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -43,68 +44,61 @@ public class SingleEpubServiceImpl implements SingleEpubService {
      * 用于保存用户上传的pdf文件
      * @param uploadFile 用户上传的文件
      * @param user 用户信息
-     * @return
+     * @return 用于下面连贯操作的PdfInfo对象
      */
-    @Override
-    public PdfInfo savePdf(File uploadFile, User user) {
-        try {
+    public PdfInfo savePdf(MultipartFile uploadFile, User user) throws IOException {
             //获取用户使用次数
             Integer times = user.getUseTimes();
-            PdfDocument pdfDocument = new PdfDocument(new FileInputStream(uploadFile));
+            times++;
             //获取用户专属的pdf文件夹，若为新用户则创建文件夹
-            File userFile = new File(pathTotal.getPdfPath() + "\\" + user.getUsername());
-            if(!userFile.exists()){
-                userFile.mkdir();
+            File savaSplitPathFile = new File(pathTotal.getPdfPath() + "\\" + user.getUsername()+"\\"+times);
+            if(!savaSplitPathFile.exists()){
+                savaSplitPathFile.mkdirs();
             }
             //根据用户的使用次数建立相应的文件夹，并且更新用户的使用次数
-            times++;
             user.setUseTimes(times);
-            String savaSplitPath = userFile.getAbsolutePath() + "\\" + times;
-            File savaSplitPathFile = new File(savaSplitPath);//本次转换的pdf分离后所保存的文件夹
-            if(!savaSplitPathFile.exists()){
-                savaSplitPathFile.mkdir();
-            }
+            String savaSplitPath = savaSplitPathFile.getAbsolutePath();
+
             //将用户上传的pdf放入相应文件夹中
-            InputStream inputStream = new FileInputStream(uploadFile);
-            OutputStream outputStream = new FileOutputStream(userFile.getAbsolutePath() + "\\" + uploadFile.getName());
-            byte[] buf = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buf)) > 0) {
-                outputStream.write(buf, 0, bytesRead);
+            byte[] uploadFileBytes = uploadFile.getBytes();
+            File upFile = new File(pathTotal.getPdfPath() + "\\" + user.getUsername() + "\\" + uploadFile.getOriginalFilename());
+            if(!upFile.exists()){
+                upFile.createNewFile();
             }
-            //获取当前时间
-            Calendar calendar = new GregorianCalendar();
+            OutputStream outputStream = new FileOutputStream(upFile);
+            outputStream.write(uploadFileBytes);
+        PdfDocument pdfDocument = new PdfDocument(new FileInputStream(upFile));
             //将pdf信息保存到数据库中
             PdfInfo pdfInfo = pdfInfoDao.save(new PdfInfo()
-                    .setPdfName(uploadFile.getName())
-                    .setSize(uploadFile.length())
-                    .setSavePath(userFile.getAbsolutePath())
+                    .setPdfName(upFile.getName())
+                    .setSize(upFile.length())
+                    .setSavePath(upFile.getAbsolutePath())
                     .setPageNum(pdfDocument.getPages().getCount())
                     .setUserId(user.getUserId())
-                    .setSaveTime(CommonUtils.dateFormat(calendar))
+                    .setSaveTime(CommonUtils.dateFormatRightNow())
                     .setUpload(true)
                     .setSplitPath(savaSplitPath));
-            inputStream.close();
             outputStream.close();
             return pdfInfo;
-        } catch (IOException e) {
-            log.info(e.toString());
-        }
-        return null;
     }
+
+
+
+
+
+
+
 
     /**
      * 用于分离pdf文件
      * @param pdfInfo 保存的pdf相关信息
-     * @return
      */
-    @Override
     public void splitPdf(PdfInfo pdfInfo) {
         //获取pdf文件所在位置
-        String pdfFileName = pdfInfo.getSavePath() + "\\" + pdfInfo.getPdfName();
+        String pdfFileName = pdfInfo.getSavePath();
         //获取分离后所需放的文件夹
         String pdfSplitFileName = pdfInfo.getSplitPath();
-        //调用方法类，实现分离
+        //调用方法，实现分离
         PdfUtil.splitPdfs(pdfFileName,pdfSplitFileName);
     }
 
@@ -112,9 +106,8 @@ public class SingleEpubServiceImpl implements SingleEpubService {
      * 用于将分离的pdf文件转换为Html文件
      * @param pdfInfo 保存的pdf相关信息
      * @param user 用户的信息
-     * @return
+     * @return 用于下面连贯操作转换为pdf的HtmlInfo对象
      */
-    @Override
     public HtmlInfo saveHtml(PdfInfo pdfInfo,User user) {
         //获取用户使用次数
         Integer times = user.getUseTimes();
@@ -145,8 +138,7 @@ public class SingleEpubServiceImpl implements SingleEpubService {
      * @param htmlInfo 需要使用到的html信息
      * @param user 用户信息
      */
-    @Override
-    public void createEpub(PdfInfo pdfInfo, HtmlInfo htmlInfo, User user) {
+    public String createEpub(PdfInfo pdfInfo, HtmlInfo htmlInfo, User user) {
         //获取需要转换为Epub的html文件集合路径
         String htmlInfoSavePath = htmlInfo.getSavePath();
         //获取该用户下的专属Epub文件夹，若不存在则创建
@@ -176,7 +168,90 @@ public class SingleEpubServiceImpl implements SingleEpubService {
                 .setSaveTime(CommonUtils.dateFormat(calendar))
                 .setUserId(user.getUserId())
                 .setSize(length));
+        return saveEpubPath;
+    }
+
+    @Override
+    public String pdfToEpub_Single(MultipartFile uploadFile, String username) throws IOException {
+            User user = userDao.findByUsername(username);
+            PdfInfo info = savePdf(uploadFile, user);
+            splitPdf(info);
+            HtmlInfo htmlInfo = saveHtml(info, user);
+            String epub = createEpub(info, htmlInfo, user);
+            delAndMoveFile(htmlInfo,info);
+            return epub;
+    }
+
+    public String pdfToEpub_Single(File uploadFile, String username) throws IOException {
+        User user = userDao.findByUsername(username);
+        Integer times = user.getUseTimes();
+        times++;
+        String savaSplitPath = uploadFile.getParent() + "\\" + times;
+        File savaSplitPathFile = new File(savaSplitPath);
+        if(!savaSplitPathFile.exists()){
+            savaSplitPathFile.mkdir();
+        }
+        PdfDocument pdfDocument = new PdfDocument(new FileInputStream(uploadFile));
+        PdfInfo info = new PdfInfo()
+                .setPdfName(uploadFile.getName())
+                .setSize(uploadFile.length())
+                .setSavePath(uploadFile.getAbsolutePath())
+                .setPageNum(pdfDocument.getPages().getCount())
+                .setUserId(user.getUserId())
+                .setSaveTime(CommonUtils.dateFormatRightNow())
+                .setUpload(true)
+                .setSplitPath(savaSplitPath);
+        splitPdf(info);
+        HtmlInfo htmlInfo = saveHtml(info, user);
+        String epub = createEpub(info, htmlInfo, user);
+        delAndMoveFile(htmlInfo,info);
+        return epub;
     }
 
 
+    /**
+     * 用于删除分离出来的pdf、保存用户上传的pdf和删除转换过程中的html文件
+     * @param htmlInfo html信息
+     * @param pdfInfo pdf信息
+     * @throws IOException
+     */
+    public void delAndMoveFile(HtmlInfo htmlInfo, PdfInfo pdfInfo) throws IOException {
+        //首先获取pdf的分隔文件夹，删除下面的所有文件夹
+        String splitPath = pdfInfo.getSplitPath();
+        File oldFile = new File(splitPath);
+        File[] files = oldFile.listFiles();
+        for (File file : files) {
+            while (file.exists()){
+                //如果未删除则继续删除
+                System.gc();
+                file.delete();
+            }
+        }
+        //获取保存html的文件夹，删除下面的所有文件夹,与上面同理
+        String savePath = htmlInfo.getSavePath();
+        File file = new File(savePath);
+        File[] files1 = file.listFiles();
+        for (File file1 : files1) {
+            File file2 = new File(file1.getAbsolutePath());
+            while (file2.exists()){
+                //如果未删除则继续删除
+                System.gc();
+                file2.delete();
+            }
+        }
+        //得到用户上传的pdf，并且保存将分隔pdf的文件夹作为目标文件夹
+        File pdfFile = new File(pdfInfo.getSavePath());
+
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            OutputStream outputStream = null;
+            InputStream inputStream = new FileInputStream(pdfFile);
+            outputStream = new FileOutputStream(splitPath + "\\" + pdfInfo.getPdfName());
+            while ((bytesRead = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, bytesRead);
+            }
+
+    }
 }
+
+

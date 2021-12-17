@@ -1,6 +1,8 @@
 server:
   port: 8081
 spring:
+  application:
+    name: pdf-epub-service
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -25,4 +27,12 @@ com:
     EpubPath: D:\data\pdf\Test\EpubTotal
     PdfPath: D:\data\pdf\Test\PdfTotal
     HtmlPath: D:\data\pdf\Test\HtmlTotal
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7081/eureka/
+  instance:
+    instance-id: pdf-epub-service-8081
+
 

@@ -6,8 +6,9 @@ import center.misaki.pojo.PdfInfo;
 import center.misaki.pojo.User;
 
 import center.misaki.service.SingleEpubService;
-import org.junit.jupiter.api.Test;
 
+
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -16,6 +17,7 @@ import org.springframework.test.annotation.Rollback;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.IOException;
 
 
 @SpringBootTest(classes = PdfToEpubApplication_8081.class)
@@ -50,21 +52,28 @@ public class SpringData_JpaTestCase {
 //        userDao.save(new User().setUsername("123").setPassword("123").setLastTime("2021"));
     }
 
-    public static String uploadPdf = "D:\\data\\pdf\\test01\\abc.pdf";
+    public static String uploadPdf = "F:\\documents\\Data\\test00.pdf";
 
 
     /**
      * 测试将用户上传的pdf转为Epub
      */
-    @Test
-    @Transactional
-    @Rollback(false)
-    public void testSaveAndSplitPdf(){
-        User user = userDao.getById(1);
-        PdfInfo info = singleEpubService.savePdf(new File(uploadPdf), user);
-        singleEpubService.splitPdf(info);
-        HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);
-        singleEpubService.createEpub(info,htmlInfo, user);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(false)
+//    public void testSaveAndSplitPdf(){
+//        User user = userDao.findById(1).get();
+//        PdfInfo info = singleEpubService.savePdf(new File(uploadPdf), user);
+//        singleEpubService.splitPdf(info);
+//        HtmlInfo htmlInfo = singleEpubService.saveHtml(info, user);
+//        singleEpubService.createEpub(info,htmlInfo, user);
+//    }
+//
+//    @Test
+//    @Transactional
+//    @Rollback(false)
+//    public void Mytest() throws IOException {
+//        singleEpubService.pdfToEpub_Single(new File(uploadPdf),"admin");
+//    }
 
 }

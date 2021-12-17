@@ -2,7 +2,7 @@ server:
   port: 9527
 spring:
   application:
-    name: conveter_system-zuul
+    name: conveter-system-zuul
 
 eureka:
   client:
@@ -12,9 +12,14 @@ eureka:
     instance-id: zuul-9527
     prefer-ip-address: true
 
-
-
-#info配置
-info:
-  app.name: ConveterSystem
-  company.name: misaki.center
+zuul:
+  routes:
+    first.serviceId: pdf-epub-service
+    first.path: /first/**
+  ignored-services: pdf-epub-service
+  host:
+    max-total-connections: 100
+pdf-epub-service:
+  ribbon:
+    ReadTimeout: 1000000
+    SocketTimeout: 6000000
