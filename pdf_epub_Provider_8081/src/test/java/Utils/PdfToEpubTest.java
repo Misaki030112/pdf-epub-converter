@@ -31,7 +31,7 @@ public class PdfToEpubTest {
      * @throws FileNotFoundException 异常未找到文件
      */
     @Test
-    public void pdfToHtml() throws FileNotFoundException {
+    public void pdfToHtml() throws IOException {
         PdfUtil.toHtmls(savePdfPath,saveHtmlPath);
     }
 

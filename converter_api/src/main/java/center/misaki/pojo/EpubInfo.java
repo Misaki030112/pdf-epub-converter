@@ -11,10 +11,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "epub")
 public class EpubInfo implements Serializable {
-    //epub主键ID
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer epubId;
     //epub文件名
     private String epubName;
     //epub文件大小
@@ -22,6 +18,7 @@ public class EpubInfo implements Serializable {
     //epub文件保存时间
     private String saveTime;
     //epub文件保存路径
+    @Id
     private String savePath;
     //与之关联的用户Id
     private Integer userId;
